@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/07/01/RxJava-start/index.html">
 <meta property="og:site_name" content="YangXiaowu">
 <meta property="og:description" content="学习理由半年前吧，大学同学过来玩，聊到了RxJava。他当时问我知道RxJava不，然而我并不知道，只是简单搜索了解了一下，其实也不算了解，就是看了一下。时隔半年，现在的项目基本不写界面了（安卓猿一枚），天天和部标协议打交道，越来越觉得写的代码不优雅了，所以想起了RxJava，这么火的东西这半年我居然没有去学习，罪过。所以搜了一点入门的文章学习了一下，争取早日灵活运用到以后的项目中。撒花(●’◡’">
-<meta property="og:updated_time" content="2016-07-01T16:02:31.332Z">
+<meta property="og:updated_time" content="2016-07-02T10:52:49.989Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxJava入门小结，坚持写">
 <meta name="twitter:description" content="学习理由半年前吧，大学同学过来玩，聊到了RxJava。他当时问我知道RxJava不，然而我并不知道，只是简单搜索了解了一下，其实也不算了解，就是看了一下。时隔半年，现在的项目基本不写界面了（安卓猿一枚），天天和部标协议打交道，越来越觉得写的代码不优雅了，所以想起了RxJava，这么火的东西这半年我居然没有去学习，罪过。所以搜了一点入门的文章学习了一下，争取早日灵活运用到以后的项目中。撒花(●’◡’">
@@ -240,7 +240,50 @@ Observable.from(str).subscribe(new Action1&lt;String&gt;() {
         Log.d(TAG,s);
     }
 });
-</code></pre><p>删了又打，实在没想好怎么描述这段代码，反正我懂了，就是理论记得不扎实。总的来说这就是一个观察者模式，Observable是被观察者，后面Action1是个什么写法来着，就是省略了个啥(Subscriber)。明儿加完班再接着写，刚才是被vi坑了，因为我根本不知道从AndroidStudio里复制的代码怎么粘贴(Windows环境，使用Babun)，所以装逼失败，然后老实的打开Notepad++接着写，尽情的嘲笑吧，哈哈哈哈</p>
+</code></pre><a id="more"></a>
+<p>删了又打，实在没想好怎么描述这段代码，反正我懂了，就是理论记得不扎实。总的来说这就是一个观察者模式，Observable是被观察者，from将数组的元素拆分后依次发送出来，这里也可以用just(“hello”,”world”)，后面Action1是个什么写法来着，就是省略了个啥(Subscriber)，哦对了，就是subsvribe()支持不完整定义的回调，RxJava会自动根据定义创建Subscriber（观察者）。明儿加完班再接着写，刚才是被vi坑了，因为我根本不知道从AndroidStudio里复制的代码怎么粘贴(Windows环境，使用Babun)，所以装逼失败，然后老实的打开Notepad++接着写，尽情的嘲笑吧，哈哈哈哈</p>
+<p>上面的代码也可以这样写</p>
+<pre><code>String[] str=new String[]{&quot;Hello&quot;,&quot;World&quot;};
+Observable.from(str).subscribe(new Subscriber&lt;String&gt;() {
+    @Override
+    public void onCompleted() {
+
+    }
+
+    @Override
+    public void onError(Throwable e) {
+
+    }
+
+    @Override
+    public void onNext(String s) {
+        Log.d(TAG,s);
+    }
+});
+</code></pre><p>实际上呢，按部就班一点来说，RxJava通过create()来创建一个Observable，所以按部就班的来说，原汁原味的代码是这样的</p>
+<pre><code>Observable.create(new Observable.OnSubscribe&lt;String&gt;() {
+    @Override
+    public void call(Subscriber&lt;? super String&gt; subscriber) {
+        //这里还可以调用onStart()做一些预处理的事
+        subscriber.onNext(&quot;Hello&quot;);
+        subscriber.onNext(&quot;World&quot;);
+        subscriber.onCompleted();
+    }
+}).subscribe(new Subscriber&lt;String&gt;() {
+    @Override
+    public void onCompleted() {
+    }
+
+    @Override
+    public void onError(Throwable e) {
+    }
+
+    @Override
+    public void onNext(String s) {
+        Log.d(TAG,s);
+    }
+});
+</code></pre><p>然后还有好多内容，比如Scheduler（线程控制，好东西），变换 map  flatmap，都看过，没用过呀，慢慢来</p>
 
       
     </div>
