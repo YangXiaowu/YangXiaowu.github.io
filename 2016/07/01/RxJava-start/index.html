@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/07/01/RxJava-start/index.html">
 <meta property="og:site_name" content="YangXiaowu">
 <meta property="og:description" content="学习理由半年前吧，大学同学过来玩，聊到了RxJava。他当时问我知道RxJava不，然而我并不知道，只是简单搜索了解了一下，其实也不算了解，就是看了一下。时隔半年，现在的项目基本不写界面了（安卓猿一枚），天天和部标协议打交道，越来越觉得写的代码不优雅了，所以想起了RxJava，这么火的东西这半年我居然没有去学习，罪过。所以搜了一点入门的文章学习了一下，争取早日灵活运用到以后的项目中。撒花(●’◡’">
-<meta property="og:updated_time" content="2016-07-02T10:52:49.989Z">
+<meta property="og:updated_time" content="2016-07-03T15:13:46.553Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxJava入门小结，坚持写">
 <meta name="twitter:description" content="学习理由半年前吧，大学同学过来玩，聊到了RxJava。他当时问我知道RxJava不，然而我并不知道，只是简单搜索了解了一下，其实也不算了解，就是看了一下。时隔半年，现在的项目基本不写界面了（安卓猿一枚），天天和部标协议打交道，越来越觉得写的代码不优雅了，所以想起了RxJava，这么火的东西这半年我居然没有去学习，罪过。所以搜了一点入门的文章学习了一下，争取早日灵活运用到以后的项目中。撒花(●’◡’">
@@ -78,7 +78,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -233,57 +233,12 @@
         <h3 id="学习理由"><a href="#学习理由" class="headerlink" title="学习理由"></a>学习理由</h3><p>半年前吧，大学同学过来玩，聊到了RxJava。他当时问我知道RxJava不，然而我并不知道，只是简单搜索了解了一下，其实也不算了解，就是看了一下。时隔半年，现在的项目基本不写界面了（安卓猿一枚），天天和部标协议打交道，越来越觉得写的代码不优雅了，所以想起了RxJava，这么火的东西这半年我居然没有去学习，罪过。所以搜了一点入门的文章学习了一下，争取早日灵活运用到以后的项目中。撒花(●’◡’●)</p>
 <h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><pre><code>compile &apos;io.reactivex:rxjava:1.1.6&apos;
 </code></pre><p>其实直接在AndtoidStudio中搜索就好，还不用关心版本问题</p>
-<h3 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h3><pre><code>String[] str=new String[]{&quot;Hello&quot;,&quot;World&quot;};
-Observable.from(str).subscribe(new Action1&lt;String&gt;() {
-    @Override
-    public void call(String s) {
-        Log.d(TAG,s);
-    }
-});
-</code></pre><a id="more"></a>
+<h3 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">String[] str=<span class="keyword">new</span> String[]&#123;<span class="string">"Hello"</span>,<span class="string">"World"</span>&#125;;</div><div class="line">Observable.from(str).subscribe(<span class="keyword">new</span> Action1&lt;String&gt;() &#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(String s)</span> </span>&#123;</div><div class="line">		Log.d(TAG,s);</div><div class="line">	&#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>删了又打，实在没想好怎么描述这段代码，反正我懂了，就是理论记得不扎实。总的来说这就是一个观察者模式，Observable是被观察者，from将数组的元素拆分后依次发送出来，这里也可以用just(“hello”,”world”)，后面Action1是个什么写法来着，就是省略了个啥(Subscriber)，哦对了，就是subsvribe()支持不完整定义的回调，RxJava会自动根据定义创建Subscriber（观察者）。明儿加完班再接着写，刚才是被vi坑了，因为我根本不知道从AndroidStudio里复制的代码怎么粘贴(Windows环境，使用Babun)，所以装逼失败，然后老实的打开Notepad++接着写，尽情的嘲笑吧，哈哈哈哈</p>
-<p>上面的代码也可以这样写</p>
-<pre><code>String[] str=new String[]{&quot;Hello&quot;,&quot;World&quot;};
-Observable.from(str).subscribe(new Subscriber&lt;String&gt;() {
-    @Override
-    public void onCompleted() {
-
-    }
-
-    @Override
-    public void onError(Throwable e) {
-
-    }
-
-    @Override
-    public void onNext(String s) {
-        Log.d(TAG,s);
-    }
-});
-</code></pre><p>实际上呢，按部就班一点来说，RxJava通过create()来创建一个Observable，所以按部就班的来说，原汁原味的代码是这样的</p>
-<pre><code>Observable.create(new Observable.OnSubscribe&lt;String&gt;() {
-    @Override
-    public void call(Subscriber&lt;? super String&gt; subscriber) {
-        //这里还可以调用onStart()做一些预处理的事
-        subscriber.onNext(&quot;Hello&quot;);
-        subscriber.onNext(&quot;World&quot;);
-        subscriber.onCompleted();
-    }
-}).subscribe(new Subscriber&lt;String&gt;() {
-    @Override
-    public void onCompleted() {
-    }
-
-    @Override
-    public void onError(Throwable e) {
-    }
-
-    @Override
-    public void onNext(String s) {
-        Log.d(TAG,s);
-    }
-});
-</code></pre><p>然后还有好多内容，比如Scheduler（线程控制，好东西），变换 map  flatmap，都看过，没用过呀，慢慢来</p>
+<p>上面的代码也可以这样写<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">String[] str=<span class="keyword">new</span> String[]&#123;<span class="string">"Hello"</span>,<span class="string">"World"</span>&#125;;</div><div class="line">      Observable.from(str).subscribe(<span class="keyword">new</span> Subscriber&lt;String&gt;() &#123;</div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompleted</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">          &#125;</div><div class="line"></div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</div><div class="line"></div><div class="line">          &#125;</div><div class="line"></div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(String s)</span> </span>&#123;</div><div class="line">              Log.d(TAG,s);</div><div class="line">          &#125;</div><div class="line">      &#125;);</div></pre></td></tr></table></figure></p>
+<p>实际上呢，按部就班一点来说，RxJava通过create()来创建一个Observable，所以按部就班的来说，原汁原味的代码是这样的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">   Observable.create(<span class="keyword">new</span> Observable.OnSubscribe&lt;String&gt;() &#123;</div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Subscriber&lt;? <span class="keyword">super</span> String&gt; subscriber)</span> </span>&#123;</div><div class="line">		<span class="comment">//这里还可以调用onStart()做一些预处理的事</span></div><div class="line">              subscriber.onNext(<span class="string">"Hello"</span>);</div><div class="line">              subscriber.onNext(<span class="string">"World"</span>);</div><div class="line">              subscriber.onCompleted();</div><div class="line">          &#125;</div><div class="line">      &#125;).subscribe(<span class="keyword">new</span> Subscriber&lt;String&gt;() &#123;</div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompleted</span><span class="params">()</span> </span>&#123;</div><div class="line">          &#125;</div><div class="line"></div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</div><div class="line">          &#125;</div><div class="line"></div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(String s)</span> </span>&#123;</div><div class="line">              Log.d(TAG,s);</div><div class="line">          &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>然后还有好多内容，比如Scheduler（线程控制，好东西），变换 map  flatmap，都看过，没用过呀，慢慢来</p>
 
       
     </div>

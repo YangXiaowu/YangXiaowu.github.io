@@ -77,7 +77,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -227,14 +227,7 @@
         <h3 id="学习理由"><a href="#学习理由" class="headerlink" title="学习理由"></a>学习理由</h3><p>半年前吧，大学同学过来玩，聊到了RxJava。他当时问我知道RxJava不，然而我并不知道，只是简单搜索了解了一下，其实也不算了解，就是看了一下。时隔半年，现在的项目基本不写界面了（安卓猿一枚），天天和部标协议打交道，越来越觉得写的代码不优雅了，所以想起了RxJava，这么火的东西这半年我居然没有去学习，罪过。所以搜了一点入门的文章学习了一下，争取早日灵活运用到以后的项目中。撒花(●’◡’●)</p>
 <h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><pre><code>compile &apos;io.reactivex:rxjava:1.1.6&apos;
 </code></pre><p>其实直接在AndtoidStudio中搜索就好，还不用关心版本问题</p>
-<h3 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h3><pre><code>String[] str=new String[]{&quot;Hello&quot;,&quot;World&quot;};
-Observable.from(str).subscribe(new Action1&lt;String&gt;() {
-    @Override
-    public void call(String s) {
-        Log.d(TAG,s);
-    }
-});
-</code></pre>
+<h3 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">String[] str=<span class="keyword">new</span> String[]&#123;<span class="string">"Hello"</span>,<span class="string">"World"</span>&#125;;</div><div class="line">Observable.from(str).subscribe(<span class="keyword">new</span> Action1&lt;String&gt;() &#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(String s)</span> </span>&#123;</div><div class="line">		Log.d(TAG,s);</div><div class="line">	&#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
       
     </div>
     
