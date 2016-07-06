@@ -114,7 +114,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						
+						<a href="/tags/aidl/" style="font-size: 10px;">aidl</a>
 					</div>
 				</section>
 				
@@ -197,6 +197,70 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-aidl-demo" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/05/aidl-demo/" class="article-date">
+  	<time datetime="2016-07-05T13:44:37.000Z" itemprop="datePublished">2016-07-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/05/aidl-demo/">进程间通信·AIDL</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Android系统中的进程之间不能共享内存，因此，需要提供一些机制在不同进程之间进行数据通信。<br>为了使其他的应用程序也可以访问本应用程序提供的服务，Android系统采用了远程过程调用（Remote Procedure Call，RPC）方式来实现。与很多其他的基于RPC的解决方案一样，Android使用一种接口定义语言（Interface Definition Language，IDL）来公开服务的接口。我们知道4个Android应用程序组件中的3个（Activity、BroadcastReceiver和ContentProvider）都可以进行跨进程访问，另外一个Android应用程序组件Service同样可以。因此，可以将这种可以跨进程访问的服务称为AIDL（Android Interface Definition Language）服务。</p>
+</blockquote>
+<h3 id="我为啥要用AIDL"><a href="#我为啥要用AIDL" class="headerlink" title="我为啥要用AIDL"></a>我为啥要用AIDL</h3><p>因为最近的项目需要给别的APP提供接口。分两种，一种是别的APP直接调用的方法，另外一种是我的项目提供interface，别的APP通过实现interface来接收数据。</p>
+<p>之前呢，是把整个项目做成了一个Modules准备打成jar包提供出来，但是现在项目情况要求把我们自己的功能独立出来做成一个APP，所以瞄上AIDL了。然而，用过别人提供的AIDL文件，自己写还真没弄过，借此机会熟悉熟悉。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/aidl/">aidl</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/07/05/aidl-demo/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-RxJava-start" class="article article-type-post" itemscope itemprop="blogPost">
   

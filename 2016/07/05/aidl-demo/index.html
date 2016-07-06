@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>进程间通信·AIDL | YangXiaowu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Android系统中的进程之间不能共享内存，因此，需要提供一些机制在不同进程之间进行数据通信。为了使其他的应用程序也可以访问本应用程序提供的服务，Android系统采用了远程过程调用（Remote Procedure Call，RPC）方式来实现。与很多其他的基于RPC的解决方案一样，Android使用一种接口定义语言（Interface Definition Language，IDL）来公开服">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程间通信·AIDL">
+<meta property="og:url" content="http://yoursite.com/2016/07/05/aidl-demo/index.html">
+<meta property="og:site_name" content="YangXiaowu">
+<meta property="og:description" content="Android系统中的进程之间不能共享内存，因此，需要提供一些机制在不同进程之间进行数据通信。为了使其他的应用程序也可以访问本应用程序提供的服务，Android系统采用了远程过程调用（Remote Procedure Call，RPC）方式来实现。与很多其他的基于RPC的解决方案一样，Android使用一种接口定义语言（Interface Definition Language，IDL）来公开服">
+<meta property="og:updated_time" content="2016-07-06T15:13:55.862Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="进程间通信·AIDL">
+<meta name="twitter:description" content="Android系统中的进程之间不能共享内存，因此，需要提供一些机制在不同进程之间进行数据通信。为了使其他的应用程序也可以访问本应用程序提供的服务，Android系统采用了远程过程调用（Remote Procedure Call，RPC）方式来实现。与很多其他的基于RPC的解决方案一样，Android使用一种接口定义语言（Interface Definition Language，IDL）来公开服">
+  
+    <link rel="alternative" href="/atom.xml" title="YangXiaowu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/images/xiaowu.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Xiaowu Yang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>About</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/aidl/" style="font-size: 10px;">aidl</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Xiaowu Yang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/images/xiaowu.png" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Xiaowu Yang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-aidl-demo" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/05/aidl-demo/" class="article-date">
+  	<time datetime="2016-07-05T13:44:37.000Z" itemprop="datePublished">2016-07-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      进程间通信·AIDL
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/aidl/">aidl</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Android系统中的进程之间不能共享内存，因此，需要提供一些机制在不同进程之间进行数据通信。<br>为了使其他的应用程序也可以访问本应用程序提供的服务，Android系统采用了远程过程调用（Remote Procedure Call，RPC）方式来实现。与很多其他的基于RPC的解决方案一样，Android使用一种接口定义语言（Interface Definition Language，IDL）来公开服务的接口。我们知道4个Android应用程序组件中的3个（Activity、BroadcastReceiver和ContentProvider）都可以进行跨进程访问，另外一个Android应用程序组件Service同样可以。因此，可以将这种可以跨进程访问的服务称为AIDL（Android Interface Definition Language）服务。</p>
+</blockquote>
+<h3 id="我为啥要用AIDL"><a href="#我为啥要用AIDL" class="headerlink" title="我为啥要用AIDL"></a>我为啥要用AIDL</h3><p>因为最近的项目需要给别的APP提供接口。分两种，一种是别的APP直接调用的方法，另外一种是我的项目提供interface，别的APP通过实现interface来接收数据。</p>
+<p>之前呢，是把整个项目做成了一个Modules准备打成jar包提供出来，但是现在项目情况要求把我们自己的功能独立出来做成一个APP，所以瞄上AIDL了。然而，用过别人提供的AIDL文件，自己写还真没弄过，借此机会熟悉熟悉。<br><a id="more"></a></p>
+<h3 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h3><p>因为是进程间通信嘛，我们建两个项目，一个做服务端，一个做客户端<br>服务端aidl文件如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// IQHSdk.aidl</span></div><div class="line"><span class="keyword">package</span> com.lubao.remote;</div><div class="line"></div><div class="line"><span class="comment">// Declare any non-default types here with import statements</span></div><div class="line"><span class="comment">//看吧，这里导入很多类，这些都是实现了Parcelable的这样才能通过aidl来传递</span></div><div class="line"><span class="keyword">import</span> com.lubao.remote.CommunicateIBriefInfo;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.ExternalInterfaceDriverServiceCardInfo;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.MoneyBusiness;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.MoneyBusinessRecordBean;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.QueryExternalInterfaceDriverServiceCardInfo;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.ReceivedSm;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.WifiHotInfo;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.YangChengTongCardRecordBean;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.IQhInterface;</div><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IQHSdk</span> </span>&#123;</div><div class="line">     <span class="comment">/**</span></div><div class="line">	 * 拨打电话</div><div class="line">	 *</div><div class="line">	 * <span class="doctag">@param</span> phoneNum</div><div class="line">	 * <span class="doctag">@return</span></div><div class="line">	 */</div><div class="line">	 <span class="function"><span class="keyword">int</span> <span class="title">dial</span><span class="params">(String phoneNum)</span> </span>;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 在通话过程中发送 DTMF  字符</div><div class="line">	 *</div><div class="line">	 * <span class="doctag">@param</span> dtmfString</div><div class="line">	 * <span class="doctag">@return</span></div><div class="line">	 */</div><div class="line">	 <span class="function"><span class="keyword">boolean</span> <span class="title">sendDtmf</span><span class="params">(String dtmfString)</span> </span>;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 电话 摘机</div><div class="line">	 *</div><div class="line">	 * <span class="doctag">@return</span></div><div class="line">	 */</div><div class="line">	 <span class="function"><span class="keyword">boolean</span> <span class="title">pickup</span><span class="params">()</span> </span>;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 电话挂机</div><div class="line">	 *</div><div class="line">	 * <span class="doctag">@return</span></div><div class="line">	 */</div><div class="line">	 <span class="function"><span class="keyword">boolean</span> <span class="title">hangup</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 发送短信</div><div class="line">	 *</div><div class="line">	 * <span class="doctag">@param</span> phoneNum</div><div class="line">	 * <span class="doctag">@param</span> smContent</div><div class="line">	 * <span class="doctag">@return</span></div><div class="line">	 */</div><div class="line">	 <span class="function"><span class="keyword">int</span> <span class="title">sendSm</span><span class="params">(String phoneNum, String smContent)</span> </span>;</div><div class="line">	 </div><div class="line">	 <span class="comment">//后面还有好多好多方法，先省略了。。。</span></div><div class="line">	 </div><div class="line">	 </div><div class="line">	 <span class="comment">//实现双向通信，这里传入的参数就是另外一个aidl文件了</span></div><div class="line">	 <span class="function"><span class="keyword">void</span> <span class="title">registerCallBack</span><span class="params">(IQhInterface iqh)</span></span>;</div><div class="line">	 <span class="function"><span class="keyword">void</span> <span class="title">unregisterCallBack</span><span class="params">(IQhInterface iqh)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// IQhInterface.aidl</span></div><div class="line"><span class="keyword">package</span> com.lubao.remote;</div><div class="line"></div><div class="line"><span class="comment">// Declare any non-default types here with import statements</span></div><div class="line"><span class="keyword">import</span> com.lubao.remote.CommunicateIBriefInfo;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.ExternalInterfaceDriverServiceCardInfo;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.MoneyBusiness;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.MoneyBusinessRecordBean;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.QueryExternalInterfaceDriverServiceCardInfo;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.ReceivedSm;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.WifiHotInfo;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.YangChengTongCardRecordBean;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IQhInterface</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">	 * ACC 有效时通知</div><div class="line">	 */</div><div class="line">	 <span class="function"><span class="keyword">void</span> <span class="title">accOn</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * ACC 无效时通知</div><div class="line">	 */</div><div class="line">	 <span class="function"><span class="keyword">void</span> <span class="title">accOff</span><span class="params">()</span></span>;</div><div class="line">	 </div><div class="line">	<span class="comment">//这里也省略了很多</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>aidl文件是两个项目里面都要有的，拷贝一份，引入的类也同样两边都需要，这里小提示，创建aidl文件，并编辑内容后记得build才能生成对应的java文件。另外，看到引入的那么多类了么，说多了都是泪，还要有对应的aidl文件，比如第一个 <code>CommunicateIBriefInfo</code> ,其他的一样。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//CommunicateIBriefInfo.idl</span></div><div class="line"><span class="keyword">package</span> com.lubao.remote;</div><div class="line"><span class="keyword">import</span> com.lubao.remote.CommunicateIBriefInfo;<span class="comment">//忘了，不知道是不是必须，反正不知道为啥我引了</span></div><div class="line">parcelable CommunicateIBriefInfo;</div></pre></td></tr></table></figure></p>
+<p>aidl文件介绍完，开始说说service吧，一般命名我喜欢aidl前有个I，service没有所以就是<code>QHSdk.java</code>了，主要代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line">Handler handler=<span class="keyword">new</span> Handler()&#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">		<span class="keyword">int</span> len = mCallBacks.beginBroadcast();<span class="comment">//固定写法</span></div><div class="line">		Log.d(<span class="string">"TEST"</span>,len+<span class="string">""</span>);</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				<span class="keyword">if</span> (msg.what==<span class="number">0</span>)&#123;</div><div class="line">				   mCallBacks.getBroadcastItem(i).accOn();<span class="comment">//固定写法，这里就可以回调方法</span></div><div class="line">				&#125;<span class="keyword">else</span> <span class="keyword">if</span>(msg.what==<span class="number">1</span>)&#123;</div><div class="line">				   mCallBacks.getBroadcastItem(i).accOff();</div><div class="line">				&#125;</div><div class="line"></div><div class="line">			&#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		mCallBacks.finishBroadcast();<span class="comment">//固定写法</span></div><div class="line">		handler.sendEmptyMessageDelayed(<span class="number">1</span>,<span class="number">2000</span>);</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">public</span> RemoteCallbackList&lt;IQhInterface&gt; mCallBacks = <span class="keyword">new</span> RemoteCallbackList&lt;&gt;();</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> IQHSdk.Stub mBinder = <span class="keyword">new</span> IQHSdk.Stub() &#123;</div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 拨打电话</div><div class="line">	 *</div><div class="line">	 * <span class="doctag">@param</span> phoneNum</div><div class="line">	 * <span class="doctag">@return</span></div><div class="line">	 */</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">dial</span><span class="params">(String phoneNum)</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> PhoneControlUtil.getInstance().dial(phoneNum);</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 在通话过程中发送 DTMF  字符</div><div class="line">	 *</div><div class="line">	 * <span class="doctag">@param</span> dtmfString</div><div class="line">	 * <span class="doctag">@return</span></div><div class="line">	 */</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">sendDtmf</span><span class="params">(String dtmfString)</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">return</span> PhoneControlUtil.getInstance().sendDtmf(dtmfString);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 电话 摘机</div><div class="line">	 *</div><div class="line">	 * <span class="doctag">@return</span></div><div class="line">	 */</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">pickup</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> PhoneControlUtil.getInstance().pickup();</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//省略1000字</span></div><div class="line">	</div><div class="line">	</div><div class="line">	<span class="comment">//好吧又是这俩</span></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerCallBack</span><span class="params">(IQhInterface iqh)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">		isRegister =  mCallBacks.register(iqh);</div><div class="line">		<span class="comment">// test();</span></div><div class="line">		handler.sendEmptyMessage(<span class="number">1</span>);<span class="comment">//仅测试用</span></div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unregisterCallBack</span><span class="params">(IQhInterface iqh)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">		mCallBacks.unregister(iqh);</div><div class="line">		isRegister=<span class="keyword">false</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//这里是客户端了，随便用MainActivity试了下面代码，在这之前得bindService()</span></div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">	<span class="keyword">if</span>(mQHSdk!=<span class="keyword">null</span>)&#123;</div><div class="line">		mQHSdk.registerCallBack(mIQhInterface);<span class="comment">//看这里，当然有注册就应该有取消注册，本文略</span></div><div class="line">		Toast.makeText(MainActivity.<span class="keyword">this</span>,<span class="string">"register"</span>,Toast.LENGTH_SHORT).show();</div><div class="line">		Log.d(<span class="string">"TEST"</span>,<span class="string">"register"</span>);</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		Log.d(<span class="string">"TEST"</span>,<span class="string">"failed register"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">	e.printStackTrace();</div><div class="line">&#125;</div><div class="line"><span class="comment">//这里是按钮点击方法，客户端可以主动调用的方法，原谅我上面的aidl文件里没有写他，因为复制的时候他不在前面。</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setwifi</span><span class="params">(View view)</span> </span>&#123;</div><div class="line">	WifiHotInfo info = <span class="keyword">new</span> WifiHotInfo();</div><div class="line">	info.ssid = <span class="string">"test_ssid"</span>;</div><div class="line">	info.ssid_pwd = <span class="string">"12345678"</span>;</div><div class="line">	info.isSwitch = <span class="number">0</span>;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		mQHSdk.setWifiHotParram(info);</div><div class="line">	&#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">		e.printStackTrace();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//这里面都是回调执行的方法了</span></div><div class="line">IQhInterface mIQhInterface=<span class="keyword">new</span> IQhInterface.Stub()&#123;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accOn</span><span class="params">()</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">		Log.d(<span class="string">"test"</span>,<span class="string">"acc on"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accOff</span><span class="params">()</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">		Log.d(<span class="string">"test"</span>,<span class="string">"acc off"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">taxiEmpty</span><span class="params">()</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">	<span class="comment">//省略1000字</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>好吧，差不多就是这样了</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/07/01/RxJava-start/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">RxJava入门小结，坚持写</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="aidl-demo" data-title="进程间通信·AIDL" data-url="http://yoursite.com/2016/07/05/aidl-demo/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Xiaowu Yang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
