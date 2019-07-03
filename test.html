@@ -15,62 +15,62 @@
   
     <TR>
       <TD  colspan="2"   align="center" valign="bottom" bgColor=#f7f2ff>
-      		<input type="button" value="��ȡ����֤��" onclick="showvalue();"></a>
+      		<input type="button" value="读取二代证卡" onclick="showvalue();"></a>
     </TR>
     <TR>
-      <TD colspan="2" align="left" valign="bottom" bgColor=#f7f2ff>���˻�����Ϣ</TD>
+      <TD colspan="2" align="left" valign="bottom" bgColor=#f7f2ff>个人基本信息</TD>
     </TR>
     <TR>
-      <TD  bgColor=#f7f2ff align="right" style="width:25%">������</TD>
+      <TD  bgColor=#f7f2ff align="right" style="width:25%">姓名：</TD>
       <TD align="left" bgColor=#f7f2ff><input size="30" name="name" style="width:75%" ></TD>      
     </TR>
     <TR>
-      <TD  bgColor=#f7f2ff align="right" style="width:25%">�Ա�</TD>
+      <TD  bgColor=#f7f2ff align="right" style="width:25%">性别：</TD>
       <TD align="left" bgColor=#f7f2ff><INPUT size="2" style="width:75%" name="sex"></TD>
       
     </TR>
     <TR>
-      <TD bgColor=#f7f2ff align="right">���壺</TD>
+      <TD bgColor=#f7f2ff align="right">民族：</TD>
       <TD align="left" bgColor=#f7f2ff><INPUT size="4" style="width:75%" name="national" ></TD>
      
     </TR>
     <TR>
 
-      <TD bgColor=#f7f2ff align="right">�������ڣ�</TD>
+      <TD bgColor=#f7f2ff align="right">出生日期：</TD>
       <TD bgColor=#f7f2ff><INPUT size="16" name="birthday" style="width:75%" type=""></TD>
      
     </TR>
     <TR>
 
-      <TD bgColor=#f7f2ff align="right">סַ��</TD>
+      <TD bgColor=#f7f2ff align="right">住址：</TD>
       <TD  bgColor=#f7f2ff><INPUT size="70" name="address" style="width:75%" type=""></TD>
     </TR>
     <TR>
-      <TD bgColor=#f7f2ff align="right">�������ݺ��룺</TD>
+      <TD bgColor=#f7f2ff align="right">公民身份号码：</TD>
       <TD  bgColor=#f7f2ff><INPUT size="36" name="id" style="width:75%" type=""></TD>
     </TR>
     <TR>
-      <TD bgColor=#f7f2ff align="right">ǩ�����أ�</TD>
+      <TD bgColor=#f7f2ff align="right">签发机关：</TD>
       <TD  bgColor=#f7f2ff><INPUT size="30" name="qfjg" style="width:75%" type="" ></TD>
     </TR>
     <TR>
-      <TD bgColor=#f7f2ff align="right">��Ч����ʼ���ڣ�</TD>
+      <TD bgColor=#f7f2ff align="right">有效期起始日期：</TD>
       <TD  bgColor=#f7f2ff><INPUT size="16" name="yxqstart" style="width:75%" type=""></TD>
     </TR>
     <TR>
-      <TD bgColor=#f7f2ff align="right">��Ч�ڽ�ֹ���ڣ�</TD>
+      <TD bgColor=#f7f2ff align="right">有效期截止日期：</TD>
       <TD  bgColor=#f7f2ff><INPUT size="16" name="yxqend" style="width:75%" type=""></TD>
     </TR>
     <TR>
-      <TD bgColor=#f7f2ff align="right">����סַ��</TD>
+      <TD bgColor=#f7f2ff align="right">最新住址：</TD>
       <TD  bgColor=#f7f2ff><INPUT size="70" name="newaddress" style="width:75%" type=""></TD>
     </TR>
     <TR>
-      <TD bgColor=#f7f2ff align="right">��Ƭ</TD>
+      <TD bgColor=#f7f2ff align="right">照片</TD>
       <TD  bgColor=#f7f2ff><INPUT size="70" name="Base64" style="width:75%" type=""></TD>
     </TR>
     <TR>
-      <TD bgColor=#f7f2ff align="right">�Ƿ�ָ����Ϣ</TD>
+      <TD bgColor=#f7f2ff align="right">是否含指纹信息</TD>
       <TD  bgColor=#f7f2ff><INPUT size="70" name="fp" style="width:75%" type=""></TD>
     </TR>
 </table>
@@ -105,7 +105,7 @@
 					}
 					if(flag!=1)
 					{
-						alert("�򿪶˿�ʧ��");		
+						alert("打开端口失败");		
 						
 					}
 				}								
@@ -135,11 +135,11 @@
 				}
 				else
 				{
-					alert("��������"+aaa.ReadCardPath("",1));
+					alert("读卡错误！"+aaa.ReadCardPath("",1));
 				}
 				}
 				else{
-				alert("�ҿ�����,�����·ſ�!");
+				alert("找卡错误,请重新放卡!");
 				}
 			}
 			aaa.EndComm();	
